@@ -1,70 +1,79 @@
-# Coding Test Dotkon | ToDo List
+# ToDoList API
 
-Agradecemos por estar participando do nosso processo seletivo! Estamos muito felizes em ter você por aqui 😃
-A primeira etapa do processo seletivo é um teste técnico, que está descrito abaixo. Boa sorte! \o/
+A **ToDoList API** é uma aplicação de gerenciamento de tarefas que permite aos usuários realizar operações de CRUD (Create, Read, Update, Delete) para tarefas e autenticação de usuários. A API foi construída utilizando o framework **.NET 9** com **SQL Server** para persistência de dados e **JWT** para autenticação.
 
-## Descrição
+## Funcionalidades
 
-Desenvolva uma aplicação em que uma pessoa possa controlar suas tarefas diárias e ter controle do que já foi concluído e o que está em andamento. O usuário precisa ver um título, descrição e data para término, e também a possibilidade de criar novas tarefas. Além do próprio usuário, outras pessoas também podem adicionar tarefas para si mesmas, mas o usuário principal não verá as tarefas das outras pessoas.
+- **Autenticação JWT**: Protege os endpoints da API garantindo que apenas usuários autenticados possam acessar as funcionalidades.
+- **Gestão de Tarefas**: Permite criar, atualizar, visualizar e excluir tarefas.
+- **Criação de Usuários**: Permite registrar novos usuários e autenticar com credenciais válidas.
 
-OBS: Você não precisa se preocupar com performance e conhecimento de bibliotecas na resolução do teste. Se preocupe em fazer uma solução que seja clara e objetiva.
+## Tecnologias Utilizadas
 
-## Sumário
+- **.NET 9** (ASP.NET Core)
+- **SQL Server**
+- **Entity Framework Core**
+- **JWT (JSON Web Tokens)**
+- **Swagger** para documentação da API
+- **xUnit** para testes unitários
 
-1. [Requisitos de Negócio](#requisitos-de-negócio)
-2. [Requisitos Técnicos](#requisitos-técnicos)
-3. [Requisitos para a entrega](#requisitos-para-a-entrega)
-4. [Requisitos para Publicação da Aplicação](#opcional-requisitos-para-publicação-da-aplicação)
-5. [Objetivos](#objetivos)
+## Estrutura do Projeto
+
+A estrutura de diretórios do projeto é organizada da seguinte maneira:
+
+```
+Controllers/
+  AuthController.cs        # Gerencia autenticação de usuários
+  TasksController.cs       # Gerencia operações de tarefas
+  UsersController.cs       # Gerencia usuários
+Data/
+  ApplicationDbContext.cs  # Contexto do banco de dados
+Enums/
+  TasksStatus.cs           # Enum para os status das tarefas
+Helpers/
+  PasswordHelper.cs        # Classe para hash de senhas
+Migrations/
+  20250209230413_InitialCreate.cs  # Scripts de migração do banco de dados
+Models/
+  LoginRequest.cs          # Model para login
+  User.cs                  # Model para o usuário
+  ToDoTask.cs              # Model para tarefa
+Services/
+  JwtService.cs            # Serviço para geração e validação de JWT
+  PasswordHasher.cs        # Classe para hashing de senhas
+  TaskService.cs           # Serviço para operações de tarefas
+  UserService.cs           # Serviço para operações de usuários
+Program.cs                 # Arquivo de configuração da aplicação
+```
+## Endpoints da API
+
+A API possui os seguintes endpoints principais:
+
+### Autenticação
+
+- **POST /api/auth/login**: Realiza o login do usuário, retornando um token JWT.
+
+### Usuários
+
+- **POST api/users/register**: Cria um novo usuário.
+- **POST api/users/login**: Realiza o login do usuário.
+
+### Tarefas
+
+- **GET /api/tasks**: Obtém todas as tarefas do usuário autenticado.
+- **GET /api/tasks/{id}**: Obtém uma tarefa específica.
+- **POST /api/tasks**: Cria uma nova tarefa.
+- **PUT /api/tasks/{id}**: Atualiza uma tarefa existente.
+- **DELETE /api/tasks/{id}**: Exclui uma tarefa.
+
+## Testes
+
+Os testes unitários foram implementados utilizando **xUnit**. Para rodar os testes, execute o comando:
+
+```bash
+   dotnet test
+```
+
+Os testes abrangem funcionalidades como autenticação, criação de usuários, criação de tarefas e operações CRUD sobre tarefas.
 
 
-## Requisitos de Negócio
-Antes de começar a desenvolver, é importante saber gerenciar suas atividades como desenvolvedor ou gestor de projetos. Para isso, será necessário usar o GitHub.
-Faça um fork deste repositório para executar o trabalho.
-
-**Gestão de Usuários**
-1. **Criação/Remoção de Usuários**
-2. **Listagem de Usuários**
-   - Não é necessário visualizar os dados de um usuário específico, apenas a listagem de todos.
-
-**Gestão de Tarefas**
-1. **Criação/Remoção de Tarefas**
-2. **Listagem e Visualização de Tarefas**
-   - Necessário separar a listagem e visualização.
-
-## Requisitos Técnicos
-- **.NET**: Versão 7, 8 ou 9.
-- **Autenticação**: Realize autenticação na API, criando um controller de Auth para gerar um JWT.
-- **Banco de Dados**: SQL Server ou MongoDB.
-- **Validações**:
-  - Nome: Letras apenas, máx. 50 caracteres.
-  - Usuário: Alfanuméricos e ponto/underline, máx. 30 caracteres, deve iniciar com letra.
-  - Título da tarefa: Máx. 50 caracteres.
-  - Descrição da tarefa: Máx. 500 caracteres.
-  - Datas: Cadastro e término da tarefa.
-  - Usuário que adicionou a tarefa.
-
-### Diferenciais do desafio:
-- Aplicação das boas práticas do DDD, TDD, Design Patterns, SOLID e Clean Code.
-- Criação de testes de unidade.
-- Uso do pattern Command com a Lib MediatR.
-- Criptografia de senhas com SHA256.
-
-## Requisitos para a entrega
-      1. Faça um fork deste repositório;
-      2. Realize o teste;
-      3. Adicione seu currículo em PDF na raiz do repositório;
-      4. Envie-nos o PULL-REQUEST para que seja avaliado.
-
-      OBS: seus dados não ficarão públicos em nosso repositório.
-
-## [Opcional] Requisitos para Publicação da Aplicação
-- **CI/CD**: Configure os pipelines de CI (restore, build, testes e geração de artefato) e CD (publicação no app service do Azure).
-- **Cloud**: Utilize preferencialmente Azure. Uma boa saída é utilizar a conta FREE pelo https://azure.com/free
-- Usar Azure Key Vault para armazenar strings de conexão e chaves.
-- Criar um serviço de autenticação separado e use mensageria (Azure Service Bus) para comunicação.
-- Configurar um cache para a aplicação (em memória ou usando Azure Cache).
-
-## Objetivos
-Este desafio testa suas habilidades para resolver desafios do dia a dia como desenvolvedor .NET, abordando desde a gestão de tarefas até a publicação da aplicação na nuvem.
-Divirta-se no processo! 
