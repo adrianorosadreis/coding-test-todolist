@@ -17,6 +17,33 @@ A **ToDoList API** é uma aplicação de gerenciamento de tarefas que permite ao
 - **Swagger** para documentação da API
 - **xUnit** para testes unitários
 
+#### **Configuração do Banco de Dados**
+
+No `appsettings.json`, configure a string de conexão para o SQL Server:
+
+```json
+"ConnectionStrings": {
+   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SimpleBlogDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+```
+
+Caso deseje utilizar uma instância do SQL Server diferente, altere o valor de `DefaultConnection`. Em seguida, crie o banco de dados e as tabelas com o comando:
+
+```bash
+dotnet ef database update
+```
+
+#### **Configuração do Identity**
+
+Se você estiver utilizando uma configuração personalizada de `User` (como no projeto), o `ApplicationDbContext` já estará configurado para usar o modelo de usuário extendido.
+
+O projeto já inclui as migrações necessárias para o banco de dados de autenticação, então execute o seguinte para garantir que todas as migrações sejam aplicadas corretamente:
+
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
 ## Estrutura do Projeto
 
 A estrutura de diretórios do projeto é organizada da seguinte maneira:
